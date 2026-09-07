@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>About - Loan Approval Prediction</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f1f5f9;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            height: 100vh;
+            background: #1e293b;
+            color: white;
+            padding: 20px 0;
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 20px;
+        }
+
+        .sidebar a {
+            display: block;
+            color: #cbd5e1;
+            text-decoration: none;
+            padding: 14px 25px;
+            margin: 4px 10px;
+            border-radius: 6px;
+        }
+
+        .sidebar a:hover {
+            background: #334155;
+            color: white;
+        }
+
+        .sidebar a.active {
+            background: #2563eb;
+            color: white;
+        }
+
+        /* Main */
+        .main {
+            margin-left: 250px;
+            padding: 25px;
+        }
+
+        /* Topbar */
+        .topbar {
+            background: white;
+            padding: 18px 22px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .topbar h1 {
+            color: #1e293b;
+            font-size: 24px;
+        }
+
+        .admin {
+            color: #475569;
+            font-weight: bold;
+        }
+
+        /* About Card */
+        .about-card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
+        }
+
+        .about-card h2 {
+            color: #2563eb;
+            margin-bottom: 15px;
+        }
+
+        .about-card p {
+            color: #475569;
+            line-height: 1.7;
+            margin-bottom: 12px;
+        }
+
+        /* Information Cards */
+        .info-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .info-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .info-card h3 {
+            color: #1e293b;
+            margin-bottom: 15px;
+        }
+
+        .info-card p {
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        .info-card ul {
+            padding-left: 20px;
+            color: #64748b;
+            line-height: 1.8;
+        }
+
+        /* Project Details */
+        .details {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            margin-top: 25px;
+        }
+
+        .details h2 {
+            color: #1e293b;
+            margin-bottom: 20px;
+        }
+
+        .details p {
+            margin-bottom: 10px;
+            color: #475569;
+        }
+
+        .details strong {
+            color: #1e293b;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .info-container {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                width: 200px;
+            }
+
+            .main {
+                margin-left: 200px;
+            }
+        }
+
+        @media (max-width: 650px) {
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+
+            .main {
+                margin-left: 0;
+            }
+
+            .topbar {
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+
+        <h2>Loan Prediction</h2>
+
+        <a href="dashboard.html">🏠 Dashboard</a>
+        <a href="data.html">📊 Data Management</a>
+        <a href="index.html">🔮 Prediction</a>
+        <a href="analytics.html">📈 Analytics</a>
+        <a href="visualization.html">📉 Visualization</a>
+        <a href="reports.html">📄 Reports</a>
+        <a href="history.html">🕒 History</a>
+        <a href="about.html" class="active">ℹ️ About</a>
+        <a href="login.html">🚪 Logout</a>
+
+    </div>
+
+
+    <!-- Main Content -->
+    <div class="main">
+
+        <!-- Topbar -->
+        <div class="topbar">
+            <h1>About Project</h1>
+            <div class="admin">👤 Admin</div>
+        </div>
+
+
+        <!-- About Project -->
+        <div class="about-card">
+
+            <h2>Loan Approval Prediction System</h2>
+
+            <p>
+                The Loan Approval Prediction System is a machine learning
+                based application designed to predict whether a loan
+                application is likely to be approved or rejected.
+            </p>
+
+            <p>
+                The system uses applicant information such as income,
+                loan amount, credit history, education and other details
+                to generate a prediction.
+            </p>
+
+            <p>
+                The main purpose of this project is to make the loan
+                approval process faster, easier and more efficient.
+            </p>
+
+        </div>
+
+
+        <!-- Information Cards -->
+        <div class="info-container">
+
+            <div class="info-card">
+
+                <h3>🎯 Project Objective</h3>
+
+                <p>
+                    To develop a simple machine learning system that
+                    helps predict loan approval based on applicant data.
+                </p>
+
+            </div>
+
+
+            <div class="info-card">
+
+                <h3>⚙️ Technologies Used</h3>
+
+                <ul>
+                    <li>Python</li>
+                    <li>Machine Learning</li>
+                    <li>HTML</li>
+                    <li>CSS</li>
+                    <li>MySQL</li>
+                    <li>Flask</li>
+                </ul>
+
+            </div>
+
+
+            <div class="info-card">
+
+                <h3>⭐ Main Features</h3>
+
+                <ul>
+                    <li>Applicant Data Management</li>
+                    <li>Loan Prediction</li>
+                    <li>Analytics</li>
+                    <li>Visualization</li>
+                    <li>Reports</li>
+                    <li>Prediction History</li>
+                </ul>
+
+            </div>
+
+        </div>
+
+
+        <!-- Project Details -->
+        <div class="details">
+
+            <h2>Project Details</h2>
+
+            <p>
+                <strong>Project Title:</strong>
+                Loan Approval Prediction System
+            </p>
+
+            <p>
+                <strong>Project Type:</strong>
+                AI / Machine Learning Project
+            </p>
+
+            <p>
+                <strong>Application:</strong>
+                Loan Approval Prediction
+            </p>
+
+            <p>
+                <strong>Academic Year:</strong>
+                2026-2027
+            </p>
+
+            <p>
+                <strong>Version:</strong>
+                1.0
+            </p>
+
+        </div>
+
+    </div>
+
+</body>
+</html>

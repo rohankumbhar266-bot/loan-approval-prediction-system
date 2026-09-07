@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction History - Loan Approval Prediction</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f1f5f9;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            height: 100vh;
+            background: #1e293b;
+            color: white;
+            padding: 20px 0;
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 20px;
+        }
+
+        .sidebar a {
+            display: block;
+            color: #cbd5e1;
+            text-decoration: none;
+            padding: 14px 25px;
+            margin: 4px 10px;
+            border-radius: 6px;
+        }
+
+        .sidebar a:hover {
+            background: #334155;
+            color: white;
+        }
+
+        .sidebar a.active {
+            background: #2563eb;
+            color: white;
+        }
+
+        /* Main */
+        .main {
+            margin-left: 250px;
+            padding: 25px;
+        }
+
+        /* Topbar */
+        .topbar {
+            background: white;
+            padding: 18px 22px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .topbar h1 {
+            font-size: 24px;
+            color: #1e293b;
+        }
+
+        .admin {
+            color: #475569;
+            font-weight: bold;
+        }
+
+        /* Cards */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .card {
+            background: white;
+            padding: 22px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .card h3 {
+            color: #64748b;
+            font-size: 15px;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            font-size: 28px;
+            font-weight: bold;
+            color: #2563eb;
+        }
+
+        /* History Section */
+        .history-box {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .history-header h2 {
+            color: #1e293b;
+        }
+
+        .search {
+            padding: 10px 15px;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            width: 220px;
+        }
+
+        /* Table */
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #f8fafc;
+            color: #475569;
+            padding: 14px;
+            text-align: left;
+            border-bottom: 2px solid #e2e8f0;
+        }
+
+        td {
+            padding: 14px;
+            border-bottom: 1px solid #e2e8f0;
+            color: #334155;
+        }
+
+        tr:hover {
+            background: #f8fafc;
+        }
+
+        /* Status */
+        .approved {
+            background: #dcfce7;
+            color: #15803d;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .rejected {
+            background: #fee2e2;
+            color: #dc2626;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        /* Button */
+        .btn {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: #1d4ed8;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                width: 200px;
+            }
+
+            .main {
+                margin-left: 200px;
+            }
+        }
+
+        @media (max-width: 650px) {
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+
+            .main {
+                margin-left: 0;
+            }
+
+            .history-header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+
+            .search {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+
+        <h2>Loan Prediction</h2>
+
+        <a href="dashboard.html">🏠 Dashboard</a>
+        <a href="data.html">📊 Data Management</a>
+        <a href="index.html">🔮 Prediction</a>
+        <a href="analytics.html">📈 Analytics</a>
+        <a href="visualization.html">📉 Visualization</a>
+        <a href="reports.html">📄 Reports</a>
+        <a href="history.html" class="active">🕒 History</a>
+        <a href="about.html">ℹ️ About</a>
+        <a href="login.html">🚪 Logout</a>
+
+    </div>
+
+
+    <!-- Main Content -->
+    <div class="main">
+
+        <!-- Topbar -->
+        <div class="topbar">
+            <h1>Prediction History</h1>
+            <div class="admin">👤 Admin</div>
+        </div>
+
+
+        <!-- Summary Cards -->
+        <div class="cards">
+
+            <div class="card">
+                <h3>Total Predictions</h3>
+                <p>100</p>
+            </div>
+
+            <div class="card">
+                <h3>Approved</h3>
+                <p>65</p>
+            </div>
+
+            <div class="card">
+                <h3>Rejected</h3>
+                <p>35</p>
+            </div>
+
+        </div>
+
+
+        <!-- History Table -->
+        <div class="history-box">
+
+            <div class="history-header">
+
+                <h2>Previous Predictions</h2>
+
+                <input
+                    type="text"
+                    class="search"
+                    placeholder="Search applicant..."
+                >
+
+            </div>
+
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Applicant Name</th>
+                            <th>Income</th>
+                            <th>Loan Amount</th>
+                            <th>Credit History</th>
+                            <th>Date</th>
+                            <th>Prediction</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+                            <td>001</td>
+                            <td>Rahul</td>
+                            <td>₹45,000</td>
+                            <td>₹2,00,000</td>
+                            <td>Good</td>
+                            <td>01-09-2026</td>
+                            <td>
+                                <span class="approved">Approved</span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>002</td>
+                            <td>Amit</td>
+                            <td>₹25,000</td>
+                            <td>₹3,50,000</td>
+                            <td>Poor</td>
+                            <td>02-09-2026</td>
+                            <td>
+                                <span class="rejected">Rejected</span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>003</td>
+                            <td>Priya</td>
+                            <td>₹55,000</td>
+                            <td>₹2,50,000</td>
+                            <td>Good</td>
+                            <td>03-09-2026</td>
+                            <td>
+                                <span class="approved">Approved</span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>004</td>
+                            <td>Sneha</td>
+                            <td>₹30,000</td>
+                            <td>₹4,00,000</td>
+                            <td>Poor</td>
+                            <td>04-09-2026</td>
+                            <td>
+                                <span class="rejected">Rejected</span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td>005</td>
+                            <td>Akash</td>
+                            <td>₹60,000</td>
+                            <td>₹3,00,000</td>
+                            <td>Good</td>
+                            <td>05-09-2026</td>
+                            <td>
+                                <span class="approved">Approved</span>
+                            </td>
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+</html>

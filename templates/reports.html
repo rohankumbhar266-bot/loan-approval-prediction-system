@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Reports | Loan Approval Prediction</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #1e293b;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            height: 100vh;
+            background: #1e293b;
+            padding: 25px 15px;
+            color: white;
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 35px;
+            font-size: 20px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar li {
+            margin-bottom: 8px;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 13px 15px;
+            color: #cbd5e1;
+            text-decoration: none;
+            border-radius: 7px;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: #2563eb;
+            color: white;
+        }
+
+        /* MAIN */
+
+        .main {
+            margin-left: 250px;
+            min-height: 100vh;
+        }
+
+        /* TOPBAR */
+
+        .topbar {
+            height: 70px;
+            background: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .topbar h1 {
+            font-size: 22px;
+        }
+
+        .user {
+            font-weight: bold;
+        }
+
+        /* CONTENT */
+
+        .content {
+            padding: 30px;
+        }
+
+        .page-title {
+            margin-bottom: 25px;
+        }
+
+        .page-title h2 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .page-title p {
+            color: #64748b;
+        }
+
+        /* REPORT CARD */
+
+        .report-card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        .report-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .report-header h2 {
+            font-size: 21px;
+        }
+
+        /* BUTTONS */
+
+        .buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            border: none;
+            padding: 11px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .print-btn {
+            background: #2563eb;
+            color: white;
+        }
+
+        .download-btn {
+            background: #16a34a;
+            color: white;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        /* SUMMARY */
+
+        .summary {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .summary-box {
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .summary-box h3 {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+
+        .summary-box h2 {
+            font-size: 26px;
+        }
+
+        /* TABLE */
+
+        .report-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .report-table th {
+            background: #f1f5f9;
+            padding: 14px;
+            text-align: left;
+        }
+
+        .report-table td {
+            padding: 14px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        /* STATUS */
+
+        .approved {
+            color: #166534;
+            background: #dcfce7;
+            padding: 6px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .rejected {
+            color: #991b1b;
+            background: #fee2e2;
+            padding: 6px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        /* FOOTER */
+
+        .report-footer {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 900px) {
+
+            .summary {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .report-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+        }
+
+        @media (max-width: 600px) {
+
+            .sidebar {
+                width: 200px;
+            }
+
+            .main {
+                margin-left: 200px;
+            }
+
+            .content {
+                padding: 15px;
+            }
+
+            .summary {
+                grid-template-columns: 1fr;
+            }
+
+            .buttons {
+                flex-direction: column;
+            }
+
+        }
+
+        /* PRINT */
+
+        @media print {
+
+            .sidebar,
+            .topbar,
+            .buttons {
+                display: none;
+            }
+
+            .main {
+                margin-left: 0;
+            }
+
+            .content {
+                padding: 0;
+            }
+
+            .report-card {
+                box-shadow: none;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- SIDEBAR -->
+
+    <div class="sidebar">
+
+        <h2>💰 Loan System</h2>
+
+        <ul>
+
+            <li>
+                <a href="dashboard.html">
+                    🏠 Dashboard
+                </a>
+            </li>
+
+            <li>
+                <a href="data.html">
+                    👤 Data Management
+                </a>
+            </li>
+
+            <li>
+                <a href="index.html">
+                    🤖 Loan Prediction
+                </a>
+            </li>
+
+            <li>
+                <a href="analytics.html">
+                    📊 Analytics
+                </a>
+            </li>
+
+            <li>
+                <a href="visualization.html">
+                    📈 Visualization
+                </a>
+            </li>
+
+            <li>
+                <a href="reports.html" class="active">
+                    📄 Reports
+                </a>
+            </li>
+
+            <li>
+                <a href="history.html">
+                    🕘 History
+                </a>
+            </li>
+
+            <li>
+                <a href="about.html">
+                    ℹ️ About
+                </a>
+            </li>
+
+            <li>
+                <a href="login.html">
+                    🚪 Logout
+                </a>
+            </li>
+
+        </ul>
+
+    </div>
+
+
+    <!-- MAIN -->
+
+    <div class="main">
+
+
+        <!-- TOPBAR -->
+
+        <div class="topbar">
+
+            <h1>Reports</h1>
+
+            <div class="user">
+                👤 Admin
+            </div>
+
+        </div>
+
+
+        <!-- CONTENT -->
+
+        <div class="content">
+
+
+            <!-- TITLE -->
+
+            <div class="page-title">
+
+                <h2>Loan Approval Reports</h2>
+
+                <p>
+                    View summary and detailed reports of loan applications.
+                </p>
+
+            </div>
+
+
+            <!-- REPORT -->
+
+            <div class="report-card">
+
+
+                <!-- REPORT HEADER -->
+
+                <div class="report-header">
+
+                    <div>
+
+                        <h2>Loan Application Report</h2>
+
+                        <p style="color:#64748b; margin-top:5px;">
+                            Academic Project - Loan Approval Prediction System
+                        </p>
+
+                    </div>
+
+
+                    <div class="buttons">
+
+                        <button
+                            class="btn print-btn"
+                            onclick="window.print()">
+
+                            🖨️ Print
+
+                        </button>
+
+                        <button
+                            class="btn download-btn"
+                            onclick="downloadReport()">
+
+                            📥 Download
+
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- SUMMARY -->
+
+                <div class="summary">
+
+
+                    <div class="summary-box">
+
+                        <h3>Total Applications</h3>
+
+                        <h2>100</h2>
+
+                    </div>
+
+
+                    <div class="summary-box">
+
+                        <h3>Approved</h3>
+
+                        <h2>65</h2>
+
+                    </div>
+
+
+                    <div class="summary-box">
+
+                        <h3>Rejected</h3>
+
+                        <h2>35</h2>
+
+                    </div>
+
+
+                    <div class="summary-box">
+
+                        <h3>Approval Rate</h3>
+
+                        <h2>65%</h2>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- TABLE -->
+
+                <table class="report-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>ID</th>
+                            <th>Applicant</th>
+                            <th>Income</th>
+                            <th>Loan Amount</th>
+                            <th>Credit History</th>
+                            <th>Status</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+
+                        <tr>
+
+                            <td>001</td>
+
+                            <td>Rahul</td>
+
+                            <td>₹50,000</td>
+
+                            <td>₹2,00,000</td>
+
+                            <td>Good</td>
+
+                            <td>
+                                <span class="approved">
+                                    Approved
+                                </span>
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>002</td>
+
+                            <td>Amit</td>
+
+                            <td>₹35,000</td>
+
+                            <td>₹1,50,000</td>
+
+                            <td>Bad</td>
+
+                            <td>
+                                <span class="rejected">
+                                    Rejected
+                                </span>
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>003</td>
+
+                            <td>Priya</td>
+
+                            <td>₹60,000</td>
+
+                            <td>₹2,50,000</td>
+
+                            <td>Good</td>
+
+                            <td>
+                                <span class="approved">
+                                    Approved
+                                </span>
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>004</td>
+
+                            <td>Neha</td>
+
+                            <td>₹30,000</td>
+
+                            <td>₹1,80,000</td>
+
+                            <td>Bad</td>
+
+                            <td>
+                                <span class="rejected">
+                                    Rejected
+                                </span>
+                            </td>
+
+                        </tr>
+
+
+                        <tr>
+
+                            <td>005</td>
+
+                            <td>Rohit</td>
+
+                            <td>₹75,000</td>
+
+                            <td>₹3,00,000</td>
+
+                            <td>Good</td>
+
+                            <td>
+                                <span class="approved">
+                                    Approved
+                                </span>
+                            </td>
+
+                        </tr>
+
+
+                    </tbody>
+
+                </table>
+
+
+                <!-- FOOTER -->
+
+                <div class="report-footer">
+
+                    <p>
+                        Report generated by Loan Approval Prediction System.
+                    </p>
+
+                    <p style="margin-top:5px;">
+                        This report is for academic/project purposes.
+                    </p>
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+    <!-- JAVASCRIPT -->
+
+    <script>
+
+        function downloadReport() {
+
+            const reportText = `
+LOAN APPROVAL PREDICTION SYSTEM
+--------------------------------
+
+Total Applications : 100
+Approved Loans     : 65
+Rejected Loans     : 35
+Approval Rate      : 65%
+
+Applicant Report
+--------------------------------
+
+001 - Rahul - Approved
+002 - Amit - Rejected
+003 - Priya - Approved
+004 - Neha - Rejected
+005 - Rohit - Approved
+
+--------------------------------
+Report generated by Loan Approval Prediction System.
+            `;
+
+            const blob = new Blob(
+                [reportText],
+                { type: "text/plain" }
+            );
+
+            const url = URL.createObjectURL(blob);
+
+            const link = document.createElement("a");
+
+            link.href = url;
+
+            link.download = "loan_approval_report.txt";
+
+            link.click();
+
+            URL.revokeObjectURL(url);
+
+        }
+
+    </script>
+
+
+</body>
+
+</html>

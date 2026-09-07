@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Analytics | Loan Approval Prediction</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #1e293b;
+        }
+
+        /* SIDEBAR */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            height: 100vh;
+            background: #1e293b;
+            padding: 25px 15px;
+            color: white;
+        }
+
+        .sidebar h2 {
+            text-align: center;
+            margin-bottom: 35px;
+            font-size: 20px;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar li {
+            margin-bottom: 8px;
+        }
+
+        .sidebar a {
+            display: block;
+            padding: 13px 15px;
+            color: #cbd5e1;
+            text-decoration: none;
+            border-radius: 7px;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: #2563eb;
+            color: white;
+        }
+
+        /* MAIN */
+
+        .main {
+            margin-left: 250px;
+            min-height: 100vh;
+        }
+
+        /* TOPBAR */
+
+        .topbar {
+            height: 70px;
+            background: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .topbar h1 {
+            font-size: 22px;
+        }
+
+        .user {
+            font-weight: bold;
+        }
+
+        /* CONTENT */
+
+        .content {
+            padding: 30px;
+        }
+
+        .page-title {
+            margin-bottom: 25px;
+        }
+
+        .page-title h2 {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .page-title p {
+            color: #64748b;
+        }
+
+        /* CARDS */
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        .card-icon {
+            font-size: 28px;
+            margin-bottom: 12px;
+        }
+
+        .card h3 {
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 8px;
+        }
+
+        .card h2 {
+            font-size: 28px;
+        }
+
+        /* ANALYTICS SECTION */
+
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        .box {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        .box h2 {
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        /* PROGRESS */
+
+        .progress-item {
+            margin-bottom: 20px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 12px;
+            background: #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #2563eb;
+            border-radius: 10px;
+        }
+
+        .approved-fill {
+            width: 65%;
+        }
+
+        .rejected-fill {
+            width: 35%;
+            background: #ef4444;
+        }
+
+        .good-fill {
+            width: 72%;
+            background: #16a34a;
+        }
+
+        .income-fill {
+            width: 58%;
+            background: #9333ea;
+        }
+
+        /* INSIGHTS */
+
+        .insight {
+            padding: 15px;
+            margin-bottom: 12px;
+            border-radius: 7px;
+            background: #f8fafc;
+            border-left: 4px solid #2563eb;
+        }
+
+        .insight h3 {
+            margin-bottom: 5px;
+            font-size: 15px;
+        }
+
+        .insight p {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        /* TABLE */
+
+        .table-box {
+            margin-top: 25px;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            background: #f1f5f9;
+            padding: 13px;
+            text-align: left;
+        }
+
+        td {
+            padding: 13px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        /* RESPONSIVE */
+
+        @media (max-width: 1000px) {
+
+            .cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .analytics-grid {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+        @media (max-width: 600px) {
+
+            .sidebar {
+                width: 200px;
+            }
+
+            .main {
+                margin-left: 200px;
+            }
+
+            .content {
+                padding: 15px;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+
+    <!-- SIDEBAR -->
+
+    <div class="sidebar">
+
+        <h2>💰 Loan System</h2>
+
+        <ul>
+
+            <li>
+                <a href="dashboard.html">
+                    🏠 Dashboard
+                </a>
+            </li>
+
+            <li>
+                <a href="data.html">
+                    👤 Data Management
+                </a>
+            </li>
+
+            <li>
+                <a href="index.html">
+                    🤖 Loan Prediction
+                </a>
+            </li>
+
+            <li>
+                <a href="analytics.html" class="active">
+                    📊 Analytics
+                </a>
+            </li>
+
+            <li>
+                <a href="visualization.html">
+                    📈 Visualization
+                </a>
+            </li>
+
+            <li>
+                <a href="reports.html">
+                    📄 Reports
+                </a>
+            </li>
+
+            <li>
+                <a href="history.html">
+                    🕘 History
+                </a>
+            </li>
+
+            <li>
+                <a href="about.html">
+                    ℹ️ About
+                </a>
+            </li>
+
+            <li>
+                <a href="login.html">
+                    🚪 Logout
+                </a>
+            </li>
+
+        </ul>
+
+    </div>
+
+
+    <!-- MAIN -->
+
+    <div class="main">
+
+
+        <!-- TOPBAR -->
+
+        <div class="topbar">
+
+            <h1>Analytics</h1>
+
+            <div class="user">
+                👤 Admin
+            </div>
+
+        </div>
+
+
+        <!-- CONTENT -->
+
+        <div class="content">
+
+
+            <!-- TITLE -->
+
+            <div class="page-title">
+
+                <h2>Loan Analytics</h2>
+
+                <p>
+                    Analyze loan applications and approval performance.
+                </p>
+
+            </div>
+
+
+            <!-- SUMMARY CARDS -->
+
+            <div class="cards">
+
+
+                <div class="card">
+
+                    <div class="card-icon">
+                        📋
+                    </div>
+
+                    <h3>Total Applications</h3>
+
+                    <h2>100</h2>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="card-icon">
+                        ✅
+                    </div>
+
+                    <h3>Approved</h3>
+
+                    <h2>65</h2>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="card-icon">
+                        ❌
+                    </div>
+
+                    <h3>Rejected</h3>
+
+                    <h2>35</h2>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="card-icon">
+                        📈
+                    </div>
+
+                    <h3>Approval Rate</h3>
+
+                    <h2>65%</h2>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- ANALYTICS -->
+
+            <div class="analytics-grid">
+
+
+                <!-- APPROVAL ANALYSIS -->
+
+                <div class="box">
+
+                    <h2>Approval Analysis</h2>
+
+
+                    <div class="progress-item">
+
+                        <div class="progress-header">
+
+                            <span>Approved Loans</span>
+
+                            <b>65%</b>
+
+                        </div>
+
+                        <div class="progress-bar">
+
+                            <div class="progress-fill approved-fill"></div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="progress-item">
+
+                        <div class="progress-header">
+
+                            <span>Rejected Loans</span>
+
+                            <b>35%</b>
+
+                        </div>
+
+                        <div class="progress-bar">
+
+                            <div class="progress-fill rejected-fill"></div>
+
+                        </div>
+
+                    </div>
+
+
+                    <div class="progress-item">
+
+                        <div class="progress-header">
+
+                            <span>Good Credit History</span>
+
+                            <b>72%</b>
+
+                        </div>
+
+                        <div class="progress-bar">
+
+                            <div class="progress-fill good-fill"></div>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- INSIGHTS -->
+
+                <div class="box">
+
+                    <h2>Key Insights</h2>
+
+
+                    <div class="insight">
+
+                        <h3>✅ High Approval Rate</h3>
+
+                        <p>
+                            Approximately 65% of applications are approved.
+                        </p>
+
+                    </div>
+
+
+                    <div class="insight">
+
+                        <h3>💳 Credit History</h3>
+
+                        <p>
+                            Applicants with good credit history have higher approval chances.
+                        </p>
+
+                    </div>
+
+
+                    <div class="insight">
+
+                        <h3>💰 Income Analysis</h3>
+
+                        <p>
+                            Higher applicant income generally supports loan approval.
+                        </p>
+
+                    </div>
+
+
+                    <div class="insight">
+
+                        <h3>🏠 Property Area</h3>
+
+                        <p>
+                            Property location can influence the loan approval decision.
+                        </p>
+
+                    </div>
+
+
+                </div>
+
+
+            </div>
+
+
+            <!-- CATEGORY TABLE -->
+
+            <div class="table-box">
+
+                <h2 style="margin-bottom: 20px;">
+                    Application Analysis
+                </h2>
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Category</th>
+
+                            <th>Total</th>
+
+                            <th>Approved</th>
+
+                            <th>Rejected</th>
+
+                            <th>Approval Rate</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        <tr>
+
+                            <td>Graduate</td>
+
+                            <td>70</td>
+
+                            <td>50</td>
+
+                            <td>20</td>
+
+                            <td>71%</td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>Not Graduate</td>
+
+                            <td>30</td>
+
+                            <td>15</td>
+
+                            <td>15</td>
+
+                            <td>50%</td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>Urban</td>
+
+                            <td>40</td>
+
+                            <td>27</td>
+
+                            <td>13</td>
+
+                            <td>67.5%</td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>Semiurban</td>
+
+                            <td>35</td>
+
+                            <td>25</td>
+
+                            <td>10</td>
+
+                            <td>71.4%</td>
+
+                        </tr>
+
+                        <tr>
+
+                            <td>Rural</td>
+
+                            <td>25</td>
+
+                            <td>13</td>
+
+                            <td>12</td>
+
+                            <td>52%</td>
+
+                        </tr>
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+</body>
+
+</html>

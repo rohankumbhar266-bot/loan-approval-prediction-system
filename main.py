@@ -1,148 +1,61 @@
 from flask import Flask, render_template, request
-import pandas as pd
-import mysql.connector
-from sklearn.model_selection import train_test_split
-from sklearn.tree import DecisionTreeClassifier
 
 app = Flask(__name__)
 
-# ---------------- DATA + ML ----------------
-
-df = pd.read_csv(
-    "loan_approval_dataset.csv",
-    encoding="utf-16",
-    sep="\t"
-)
-
-df.columns = df.columns.str.strip()
-
-df["education"] = df["education"].str.strip().map({
-    "Graduate": 1,
-    "Not Graduate": 0
-})
-
-df["self_employed"] = df["self_employed"].str.strip().map({
-    "Yes": 1,
-    "No": 0
-})
-
-df["loan_status"] = df["loan_status"].str.strip().map({
-    "Approved": 1,
-    "Rejected": 0
-})
-
-features = [
-    "no_of_dependents",
-    "education",
-    "self_employed",
-    "income_annum",
-    "loan_amount",
-    "loan_term",
-    "cibil_score",
-    "residential_assets_value",
-    "commercial_assets_value",
-    "luxury_assets_value",
-    "bank_asset_value"
-]
-
-X = df[features]
-y = df["loan_status"]
-
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, random_state=42
-)
-
-model = DecisionTreeClassifier(random_state=42)
-model.fit(X_train, y_train)
-
-
-# ---------------- HOME ----------------
-
 @app.route("/")
-def home():
+@app.route("/login.html")
+def login():
+    return render_template("login.html")
+
+@app.route("/register")
+@app.route("/register.html")
+def register():
+    return render_template("register.html")
+
+@app.route("/dashboard")
+@app.route("/dashboard.html")
+def dashboard():
+    return render_template("dashboard.html")
+
+@app.route("/data")
+@app.route("/data.html")
+def data():
+    return render_template("data.html")
+
+@app.route("/prediction")
+@app.route("/index.html")
+def prediction():
     return render_template("index.html")
-
-
-# ---------------- PREDICT ----------------
 
 @app.route("/predict", methods=["POST"])
 def predict():
+    prediction = "Loan Approved"
+    return render_template("index.html", prediction=prediction)
 
-    education = 1 if request.form["education"] == "Graduate" else 0
-    self_employed = 1 if request.form["self_employed"] == "Yes" else 0
+@app.route("/analytics")
+@app.route("/analytics.html")
+def analytics():
+    return render_template("analytics.html")
 
-    values = [
-        int(request.form["dependents"]),
-        education,
-        self_employed,
-        int(request.form["income"]),
-        int(request.form["loan_amount"]),
-        int(request.form["loan_term"]),
-        int(request.form["cibil_score"]),
-        int(request.form["residential_assets"]),
-        int(request.form["commercial_assets"]),
-        int(request.form["luxury_assets"]),
-        int(request.form["bank_assets"])
-    ]
+@app.route("/visualization")
+@app.route("/visualization.html")
+def visualization():
+    return render_template("visualization.html")
 
-    prediction = model.predict([values])[0]
+@app.route("/reports")
+@app.route("/reports.html")
+def reports():
+    return render_template("reports.html")
 
-    result = "LOAN APPROVED" if prediction == 1 else "LOAN REJECTED"
+@app.route("/history")
+@app.route("/history.html")
+def history():
+    return render_template("history.html")
 
-
-    # ---------------- MYSQL ----------------
-
-    db = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="prathuu",
-        database="loan_approval"
-    )
-
-    cursor = db.cursor()
-
-    sql = """
-    INSERT INTO loan_predictions
-    (
-        no_of_dependents,
-        education,
-        self_employed,
-        income_annum,
-        loan_amount,
-        loan_term,
-        cibil_score,
-        residential_assets_value,
-        commercial_assets_value,
-        luxury_assets_value,
-        bank_asset_value,
-        prediction
-    )
-    VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-    """
-
-    data = (
-        values[0],
-        request.form["education"],
-        request.form["self_employed"],
-        values[3],
-        values[4],
-        values[5],
-        values[6],
-        values[7],
-        values[8],
-        values[9],
-        values[10],
-        result
-    )
-
-    cursor.execute(sql, data)
-    db.commit()
-
-    cursor.close()
-    db.close()
-
-    return render_template("index.html", prediction=result)
-
+@app.route("/about")
+@app.route("/about.html")
+def about():
+    return render_template("about.html")
 
 if __name__ == "__main__":
     app.run(debug=True)
